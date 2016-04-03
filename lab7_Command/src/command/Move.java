@@ -1,59 +1,63 @@
 package command;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
-public class Move implements Command, KeyListener
+import javax.swing.JButton;
+
+public class Move implements Command, ActionListener
 {
 	
 	@Override
 	public void executeCommand(int enter)
 	{
-		if (enter == KeyEvent.VK_UP){
-			
-		}
-		if (enter == KeyEvent.VK_DOWN){
-			
-		}
-		if (enter == KeyEvent.VK_LEFT){
-			
-		}
-		if (enter == KeyEvent.VK_RIGHT){
-			
-		}
+		// Still figuring out where to send the commands
 	}
 
 	@Override
-	public void keyPressed(KeyEvent enter)
+	public void actionPerformed(ActionEvent enter) 
 	{
-		int entered = enter.getKeyCode();
-		switch (entered){
-		case KeyEvent.VK_UP:
-			executeCommand(KeyEvent.VK_UP);
-			break;
-		case KeyEvent.VK_DOWN:
-			executeCommand(KeyEvent.VK_DOWN);
-			break;
-		case KeyEvent.VK_LEFT:
-			executeCommand(KeyEvent.VK_LEFT);
-			break;
-		case KeyEvent.VK_RIGHT:
-			executeCommand(KeyEvent.VK_RIGHT);
-			break;
-		}
-	}
+		JButton up = new JButton("Up"); 
+		up.addActionListener(new ActionListener() 
+		{
 
-	@Override
-	public void keyReleased(KeyEvent arg0)
-	{
-		// TODO Auto-generated method stub
-		
-	}
+			@Override
+			public void actionPerformed(ActionEvent e) 
+			{
+				executeCommand(0);	
+			}
+		});
+		JButton down = new JButton("Down"); 
+		up.addActionListener(new ActionListener() 
+		{
 
-	@Override
-	public void keyTyped(KeyEvent arg0)
-	{
-		// TODO Auto-generated method stub
-		
+			@Override
+			public void actionPerformed(ActionEvent e) 
+			{
+				executeCommand(2);	
+			}
+		});
+		JButton left = new JButton("Left"); 
+		up.addActionListener(new ActionListener() 
+		{
+
+			@Override
+			public void actionPerformed(ActionEvent e) 
+			{
+				executeCommand(1);	
+			}
+		});
+		JButton right = new JButton("Right"); 
+		up.addActionListener(new ActionListener() 
+		{
+
+			@Override
+			public void actionPerformed(ActionEvent e) 
+			{
+				executeCommand(3);	
+			}
+		});
 	}
 }
