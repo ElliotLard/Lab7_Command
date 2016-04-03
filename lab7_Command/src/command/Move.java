@@ -7,7 +7,7 @@ import java.awt.event.KeyListener;
 
 import javax.swing.JButton;
 
-public class Move implements Command, ActionListener
+public class Move implements Command
 {
 	
 	@Override
