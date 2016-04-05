@@ -14,6 +14,23 @@ import recovery.RecoveryBehavior;
 
 public class TestAlien
 {
+	
+	
+	/**
+	 * LAB6 TESTS
+	 * @throws ExceptionNegative 
+	 */
+	
+	@Test
+	public void testMoveConstruction() throws ExceptionNegative// constructs with name, hp, and armor
+	{
+		Alien zod = new Alien();
+		
+		//bob starts facing north with 3 maxSpeed
+		assertEquals(Environment.NORTH, zod.getDirection());
+		assertEquals(2, zod.getMaxSpeed());
+	}
+	
 	/**
 	 * LAB2 TESTS
 	 * 

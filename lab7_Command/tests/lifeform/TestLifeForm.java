@@ -10,7 +10,6 @@ import org.junit.Test;
 import Weapon.ChainGun;
 import Weapon.GenericWeapon;
 import environment.Environment;
-import environment.Range;
 import exceptions.EnvironmentException;
 
 public class TestLifeForm

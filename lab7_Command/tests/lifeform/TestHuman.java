@@ -9,6 +9,21 @@ import exceptions.EnvironmentException;
 
 public class TestHuman
 {
+	
+	/**
+	 * LAB6 TESTS
+	 */
+	
+	@Test
+	public void testMoveConstruction()// constructs with name, hp, and armor
+	{
+		Human bob = new Human("Bob", 40, 5);
+		
+		//bob starts facing north with 3 maxSpeed
+		assertEquals(Environment.NORTH, bob.getDirection());
+		assertEquals(3, bob.getMaxSpeed());
+	}
+	
 	/**
 	 * LAB2 TESTS
 	 */

@@ -15,7 +15,7 @@ import gameplay.TimeObserver;
 public abstract class LifeForm implements TimeObserver
 {
 	String myName;
-	int currentLP, maxLP, attackStrength, currentDirection, speed, maxSpeed;
+	int currentLP, maxLP, attackStrength, currentDirection, maxSpeed;
 	GenericWeapon weapon;
 	Cell location;
 
@@ -31,7 +31,7 @@ public abstract class LifeForm implements TimeObserver
 		maxLP = points;
 		currentLP = maxLP;
 		attackStrength = ad;
-		speed = maxSpeed;
+		maxSpeed = 0;
 		currentDirection = Environment.NORTH;
 	}
 
@@ -160,6 +160,8 @@ public abstract class LifeForm implements TimeObserver
 	 */
 	public void move(Cell c)
 	{
+		if(location != null)
+			location.removeLifeForm();
 		location = c;
 		c.addLifeForm(this);
 	}
@@ -191,9 +193,9 @@ public abstract class LifeForm implements TimeObserver
 	{
 		currentDirection = d;
 	}
-	public int getSpeed()
+	public int getMaxSpeed()
 	{
-		return speed;
+		return maxSpeed;
 	}
 	public int getyLocation()
 	{

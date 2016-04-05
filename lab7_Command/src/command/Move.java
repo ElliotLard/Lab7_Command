@@ -7,27 +7,26 @@ public class Move implements Command, KeyListener
 {
 	
 	@Override
-	public void executeCommand(int enter)
+	public void executeCommand(int keyPressed)
 	{
-		if (enter == KeyEvent.VK_UP){
+		if (keyPressed == KeyEvent.VK_UP){
 			
 		}
-		if (enter == KeyEvent.VK_DOWN){
+		if (keyPressed == KeyEvent.VK_DOWN){
 			
 		}
-		if (enter == KeyEvent.VK_LEFT){
+		if (keyPressed == KeyEvent.VK_LEFT){
 			
 		}
-		if (enter == KeyEvent.VK_RIGHT){
+		if (keyPressed == KeyEvent.VK_RIGHT){
 			
 		}
 	}
 
 	@Override
-	public void keyPressed(KeyEvent enter)
+	public void keyPressed(KeyEvent keyPressed)
 	{
-		int entered = enter.getKeyCode();
-		switch (entered){
+		switch (keyPressed.getKeyCode()){
 		case KeyEvent.VK_UP:
 			executeCommand(KeyEvent.VK_UP);
 			break;

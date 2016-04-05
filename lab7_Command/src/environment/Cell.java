@@ -18,8 +18,8 @@ public class Cell
 	
 	public Cell(int y, int x)
 	{
-		xLoc = x;
 		yLoc = y;
+		xLoc = x;
 	}
 	public Cell()
 	{

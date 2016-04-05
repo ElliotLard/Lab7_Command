@@ -1,7 +1,6 @@
 package environment;
 
 import exceptions.EnvironmentException;
-import gameplay.SimpleTimer;
 import lifeform.LifeForm;
 
 /**
@@ -16,8 +15,7 @@ public class Environment
 	public static final int HEIGHT = 50, WIDTH = 50;
 	public static final int CELLSIZE = 5;
 	private static Environment world;
-	private static Cell[][] tileMap;
-	private SimpleTimer timer;
+	private Cell[][] tileMap;
 
 	/**
 	 * Constructs the environment class creating the tileMap 2d array and
@@ -36,16 +34,15 @@ public class Environment
 				tileMap[y][x] = new Cell(y, x);
 			}
 		}
-		timer = new SimpleTimer();
 	}
-	
+
 	public static Environment getWorld()
 	{
-		if(world == null)
+		if (world == null)
 			world = new Environment(Environment.HEIGHT, Environment.WIDTH);
 		return world;
 	}
-	
+
 	public Cell getCell(int y, int x)
 	{
 		return tileMap[y][x];
@@ -72,9 +69,9 @@ public class Environment
 	 */
 	public void addLifeForm(int y, int x, LifeForm l) throws ArrayIndexOutOfBoundsException
 	{
-		if(y < 0 || y >= Environment.HEIGHT || x < 0 || x >= Environment.WIDTH)
+		if (y < 0 || y >= Environment.HEIGHT || x < 0 || x >= Environment.WIDTH)
 			throw new ArrayIndexOutOfBoundsException("out of the Environment bounds");
-		tileMap[y][x].addLifeForm(l);
+		l.move(this.getCell(y, x));
 	}
 
 	/**
@@ -82,53 +79,111 @@ public class Environment
 	 * 
 	 * @param y
 	 * @param x
+	 * 
 	 */
 	public void removeLifeForm(int y, int x)
 	{
 		tileMap[y][x].removeLifeForm();
 	}
-	
-	public static int getDistance(Cell c1, Cell c2)
+
+	/**
+	 * @author elliotlard
+	 * 
+	 *         finds the distance between 2 cells
+	 * 
+	 * @param cell1, cell2
+	 * @return int the distance between the cells
+	 */
+	public static int getDistance(Cell cell1, Cell cell2)
 	{
-		int xDistance = CELLSIZE * Math.abs(c1.getxLocation() - c2.getxLocation());
-		int yDistance = CELLSIZE * Math.abs(c1.getyLocation() - c2.getyLocation());
-		
-		int distance = (int)Math.sqrt(Math.pow(xDistance, 2)+Math.pow(yDistance, 2));
+		int xDistance = CELLSIZE * Math.abs(cell1.getxLocation() - cell2.getxLocation());
+		int yDistance = CELLSIZE * Math.abs(cell1.getyLocation() - cell2.getyLocation());
+
+		int distance = (int) Math.sqrt(Math.pow(xDistance, 2) + Math.pow(yDistance, 2));
 		return distance;
-		
+
 	}
-	
-	void moveLifeForm(LifeForm l) throws EnvironmentException
+
+	/**
+	 * @author elliotlard
+	 * 
+	 *         this method will move a lifeForm by first setting the number of
+	 *         actionPoints equal to the maxSpeed It will then attempt to move
+	 *         actionPoints spaces in the currentDirection if that spot is
+	 *         occupied or offscreen it will decrease actionPoints by 1 and then
+	 *         repeat until actionPoints is 0 or the movement is succesfull.
+	 * 
+	 * @param lifeForm
+	 *            the lifeForm you wish to move
+	 * @throws EnvironmentException
+	 */
+	void moveLifeForm(LifeForm lifeForm) throws EnvironmentException
 	{
-		int y = l.getyLocation(), x = l.getxLocation();
-		switch(l.getDirection())
+		int actionPoints = lifeForm.getMaxSpeed();
+		
+		//y and x coordinates of the lifeForm for readablity
+		int y = lifeForm.getyLocation(), x = lifeForm.getxLocation();
+		
+		
+		//switch case determines the direction and attempts to move accordingly
+		switch (lifeForm.getDirection())
 		{
 		case NORTH:
-			if(y == 0)
-				return;
-			l.move(y - 1, x);
+			while (actionPoints > 0)
+			{
+				if (actionPoints == 0 || y == 0) //termination conditions
+					return;
+				//if location is onscreen and unoccupied
+				if ((y - actionPoints) >= 0 && tileMap[y - actionPoints][x].getLifeForm() == null)
+				{
+					lifeForm.move(y - actionPoints, x);
+					actionPoints = 0;
+				} else //decrement actionPoints and restart loop
+					actionPoints--;
+			}
 			break;
 		case SOUTH:
-			if(y == HEIGHT-1)
-				return;
-			l.move(y + 1, x);
+			while (actionPoints > 0)
+			{
+				if (actionPoints == 0 || y == HEIGHT)
+					return;
+				if ((y + actionPoints) < HEIGHT && tileMap[y + actionPoints][x].getLifeForm() == null)
+				{
+					lifeForm.move(y + actionPoints, x);
+					actionPoints = 0;
+				} else
+					actionPoints--;
+			}
 			break;
 		case EAST:
-			if(x == WIDTH-1)
-				return;
-			l.move(y, x + 1);
+			while (actionPoints > 0)
+			{
+				if (actionPoints == 0 || x == WIDTH)
+					return;
+				if ((x + actionPoints) < WIDTH && tileMap[y][x + actionPoints].getLifeForm() == null)
+				{
+					lifeForm.move(y, x + actionPoints);
+					actionPoints = 0;
+				} else
+					actionPoints--;
+			}
 			break;
 		case WEST:
-			if(x == 0)
-				return;
-			l.move(y, x - 1);
+			while (actionPoints > 0)
+			{
+				if (actionPoints == 0 || x == 0)
+					return;
+				if ((x - actionPoints) >= 0 && tileMap[y][x - actionPoints].getLifeForm() == null)
+				{
+					lifeForm.move(y, x - actionPoints);
+					actionPoints = 0;
+				} else
+				{
+					actionPoints--;
+				}
+			}
 			break;
 		}
-	}
-	void update()
-	{
-		
-	}
-	
 
+	}
 }
