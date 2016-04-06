@@ -1,63 +1,27 @@
 package command;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-
-import javax.swing.JButton;
+import environment.Environment;
+import exceptions.EnvironmentException;
+import lifeform.LifeForm;
 
 public class Move implements Command
 {
+	LifeForm actor;
 	
-	@Override
-	public void executeCommand(int enter)
+	public Move(LifeForm lifeForm)
 	{
-		// Still figuring out where to send the commands
+		actor = lifeForm;
 	}
-
 	@Override
-	public void actionPerformed(ActionEvent enter) 
+	public void execute()
 	{
-		JButton up = new JButton("Up"); 
-		up.addActionListener(new ActionListener() 
+		try
 		{
-
-			@Override
-			public void actionPerformed(ActionEvent e) 
-			{
-				executeCommand(0);	
-			}
-		});
-		JButton down = new JButton("Down"); 
-		up.addActionListener(new ActionListener() 
+			Environment.getWorld().moveLifeForm(actor);
+		} catch (EnvironmentException e)
 		{
-
-			@Override
-			public void actionPerformed(ActionEvent e) 
-			{
-				executeCommand(2);	
-			}
-		});
-		JButton left = new JButton("Left"); 
-		up.addActionListener(new ActionListener() 
-		{
-
-			@Override
-			public void actionPerformed(ActionEvent e) 
-			{
-				executeCommand(1);	
-			}
-		});
-		JButton right = new JButton("Right"); 
-		up.addActionListener(new ActionListener() 
-		{
-
-			@Override
-			public void actionPerformed(ActionEvent e) 
-			{
-				executeCommand(3);	
-			}
-		});
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 }

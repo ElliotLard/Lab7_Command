@@ -117,7 +117,7 @@ public class Environment
 	 *            the lifeForm you wish to move
 	 * @throws EnvironmentException
 	 */
-	void moveLifeForm(LifeForm lifeForm) throws EnvironmentException
+	public void moveLifeForm(LifeForm lifeForm) throws EnvironmentException
 	{
 		int actionPoints = lifeForm.getMaxSpeed();
 		
