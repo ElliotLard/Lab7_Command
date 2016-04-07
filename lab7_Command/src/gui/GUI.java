@@ -14,6 +14,9 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import Weapon.ChainGun;
+import Weapon.Pistol;
+import Weapon.PlasmaCannon;
 import environment.Cell;
 import environment.Environment;
 import lifeform.Alien;
@@ -46,8 +49,21 @@ public class GUI extends JFrame implements ActionListener
 		/**
 		 * Just a spot filler for now. Will be replaced with a map legend.
 		 */
-		textButton = new JButton("A Button");
-		add("East", textButton);
+		JPanel mapKey = new JPanel (new GridLayout(6, 1));
+		JLabel[][] keyArray = new JLabel[6][1];
+		keyArray[0][0] = new JLabel ("A - Alien");
+		mapKey.add(keyArray[0][0]);
+		keyArray[1][0] = new JLabel ("H - Human");
+		mapKey.add(keyArray[1][0]);
+		keyArray[2][0] = new JLabel ("P - Pistol");
+		mapKey.add(keyArray[2][0]);
+		keyArray[3][0] = new JLabel ("C - ChainGun");
+		mapKey.add(keyArray[3][0]);
+		keyArray[4][0] = new JLabel ("L - PlasmaCannon");
+		mapKey.add(keyArray[4][0]);
+		keyArray[5][0] = new JLabel (". - Empty");
+		mapKey.add(keyArray[5][0]);
+		add("East", mapKey);
 		
 		/**
 		 * This section defines the center frame. To stay consistent I'm using
@@ -84,11 +100,23 @@ public class GUI extends JFrame implements ActionListener
 				 * If nothing is found it places a dot. Spacing is to keep
 				 * the window more uniform till I figure out cell padding.
 				 */
+				
+				else if (Environment.getWorld().getWeapon(x, y) instanceof Pistol)
+				{
+					labelArray[x][y] = new JLabel ("  P  ");
+				}
+				else if (Environment.getWorld().getWeapon(x, y) instanceof ChainGun)
+				{
+					labelArray[x][y] = new JLabel ("  C  ");
+				}
+				else if (Environment.getWorld().getWeapon(x, y) instanceof PlasmaCannon)
+				{
+					labelArray[x][y] = new JLabel ("  L  ");
+				}
 				else
 				{
 					labelArray[x][y] = new JLabel ("  .  ");
 				}
-				
 				/**
 				 * Sets centerPanel to hold the labelArray after it is created.
 				 */

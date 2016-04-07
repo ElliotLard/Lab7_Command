@@ -1,5 +1,6 @@
 package environment;
 
+import Weapon.GenericWeapon;
 import exceptions.EnvironmentException;
 import lifeform.LifeForm;
 
@@ -58,6 +59,11 @@ public class Environment
 	public LifeForm getLifeForm(int y, int x)
 	{
 		return tileMap[y][x].getLifeForm();
+	}
+	
+	public GenericWeapon getWeapon(int y, int x)
+	{
+		return tileMap[y][x].getWeapon();
 	}
 
 	/**

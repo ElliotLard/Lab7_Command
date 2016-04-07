@@ -13,6 +13,7 @@ import lifeform.LifeForm;
 public class Cell
 {
 	LifeForm areaMan = null;
+	GenericWeapon genWpn = null;
 	private ArrayList<GenericWeapon> onGround = new ArrayList<GenericWeapon>();
 	int xLoc, yLoc;
 	
@@ -34,6 +35,11 @@ public class Cell
 	public LifeForm getLifeForm()
 	{
 		return areaMan;
+	}
+	
+	public GenericWeapon getWeapon()
+	{
+		return genWpn;
 	}
 
 	/**
