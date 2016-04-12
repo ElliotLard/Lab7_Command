@@ -8,6 +8,14 @@ import org.junit.Test;
 
 public class TestGUI
 {
+	
+	/**
+	 * We can't actually test the GUI directly because there is
+	 * no way for the computer to know what it's supposed
+	 * to look like. Instead we create two dialogue boxes.
+	 * You just say yes or no depending on if the display is working
+	 * correctly.
+	 */
 	@Test
 	public void testInitialization()
 	{

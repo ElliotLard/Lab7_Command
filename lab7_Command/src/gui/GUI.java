@@ -24,9 +24,13 @@ import lifeform.Human;
 
 public class GUI extends JFrame implements ActionListener
 {	
-	int what[] = {0, 10, 20};
-	int huh[] = {20, 0, 20};
-	int derp = 3;
+	/**
+	 * Coordinates used to generate vertex coordinates
+	 * to create custom shapes.
+	 */
+	int xCord[] = {0, 10, 20};
+	int yCord[] = {20, 0, 20};
+	int connects = 3;
 	
 	
 	public GUI(){
@@ -97,14 +101,14 @@ public class GUI extends JFrame implements ActionListener
 		for (int x = 0; x < Environment.HEIGHT; x++){
 			for (int y = 0; y < Environment.WIDTH; y++){
 				/**
-				 * Checks for an Alien and places an A if it finds one.
+				 * Checks for an Alien and places a green triangle if it finds one.
 				 */
 				if (Environment.getWorld().getLifeForm(x, y) instanceof Alien)
 				{
 					labelArray[x][y] = new JLabel (createTriangle());
 				}
 				/**
-				 * Checks for a Human and places an H if it finds one.
+				 * Checks for a Human and places an red circle if it finds one.
 				 */
 				else if (Environment.getWorld().getLifeForm(x, y) instanceof Human)
 				{
@@ -150,17 +154,25 @@ public class GUI extends JFrame implements ActionListener
 		setVisible(true);
 	}
 	
+	/**
+	 * Green triangle used to represent Aliens
+	 * @return
+	 */
 	public ImageIcon createTriangle(){
 		BufferedImage Image = new
 				BufferedImage (20, 20, BufferedImage.TYPE_4BYTE_ABGR);
 		Graphics drawer = Image.getGraphics();
 		
 		drawer.setColor(new Color(0, 255, 0));
-		drawer.fillPolygon(what, huh,  derp);
+		drawer.fillPolygon(xCord, yCord,  connects);
 		
 		return new ImageIcon(Image);
 	}
 	
+	/**
+	 * Red Circle used to represent humans
+	 * @return
+	 */
 	public ImageIcon createCircle(){
 		BufferedImage Image = new
 				BufferedImage (20, 20, BufferedImage.TYPE_4BYTE_ABGR);
@@ -172,6 +184,10 @@ public class GUI extends JFrame implements ActionListener
 		return new ImageIcon(Image);
 	}
 	
+	/**
+	 * Ground is represented by a gray square with a black border.
+	 * @return
+	 */
 	public ImageIcon createGround(){
 		BufferedImage Image = new
 				BufferedImage (20, 20, BufferedImage.TYPE_4BYTE_ABGR);
@@ -186,6 +202,10 @@ public class GUI extends JFrame implements ActionListener
 		return new ImageIcon(Image);
 	}
 	
+	/**
+	 * Makes a tiny purple dot for a pistol
+	 * @return
+	 */
 	public ImageIcon createPistol(){
 		BufferedImage Image = new
 				BufferedImage (20, 20, BufferedImage.TYPE_4BYTE_ABGR);
@@ -197,6 +217,10 @@ public class GUI extends JFrame implements ActionListener
 		return new ImageIcon(Image);
 	}
 	
+	/**
+	 * Makes a tiny teal dot for a Chain Gun
+	 * @return
+	 */
 	public ImageIcon createChainGun(){
 		BufferedImage Image = new
 				BufferedImage (20, 20, BufferedImage.TYPE_4BYTE_ABGR);
@@ -208,6 +232,10 @@ public class GUI extends JFrame implements ActionListener
 		return new ImageIcon(Image);
 	}
 	
+	/**
+	 * Makes a tiny purple dot for Plasma Cannon
+	 * @return
+	 */
 	public ImageIcon createPlasmaCannon(){
 		BufferedImage Image = new
 				BufferedImage (20, 20, BufferedImage.TYPE_4BYTE_ABGR);
@@ -223,7 +251,7 @@ public class GUI extends JFrame implements ActionListener
 	 * Not touched yet
 	 */
 	@Override
-	public void actionPerformed(ActionEvent arg0)
+	public void actionPerformed(ActionEvent mapAction)
 	{
 		// Seriously. I haven't done this.
 		
