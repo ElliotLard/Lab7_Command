@@ -19,10 +19,11 @@ import Weapon.Pistol;
 import Weapon.PlasmaCannon;
 import environment.Cell;
 import environment.Environment;
+import gameplay.TimeObserver;
 import lifeform.Alien;
 import lifeform.Human;
 
-public class GUI extends JFrame implements ActionListener
+public class GUI extends JFrame implements TimeObserver
 {	
 	/**
 	 * Coordinates used to generate vertex coordinates
@@ -248,13 +249,17 @@ public class GUI extends JFrame implements ActionListener
 	}
 
 	/**
-	 * Not touched yet
+	 * Every five seconds the GUI is redrawn and updated.
+	 * Must be added as a TimeObserver to function.
 	 */
+	
 	@Override
-	public void actionPerformed(ActionEvent mapAction)
+	public void updateTime(int time)
 	{
-		// Seriously. I haven't done this.
-		
-		// Stahp
+		if (time % 5 == 0)
+		{
+			revalidate();
+			repaint();
+		}
 	}
 }
