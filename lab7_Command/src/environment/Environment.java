@@ -12,7 +12,7 @@ import lifeform.LifeForm;
 public class Environment
 {
 	public static final int NORTH = 0, EAST = 1, SOUTH = 2, WEST = 3;
-	public static final int HEIGHT = 50, WIDTH = 50;
+	public static final int HEIGHT = 10, WIDTH = 10;
 	public static final int CELLSIZE = 5;
 	private static Environment world;
 	private Cell[][] tileMap;
