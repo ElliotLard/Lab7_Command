@@ -4,16 +4,15 @@ import lifeform.LifeForm;
 
 public class Attack implements Command
 {
-	LifeForm actor, victim;
+	LifeForm actor;
 	
-	public Attack(LifeForm lifeForm, LifeForm v)
+	public Attack(LifeForm lifeForm)
 	{
 		actor = lifeForm;
-		victim = v;
 	}
 	@Override
 	public void execute()
 	{
-		actor.attack(victim);
+		actor.attack(actor, actor.getDirection());
 	}
 }

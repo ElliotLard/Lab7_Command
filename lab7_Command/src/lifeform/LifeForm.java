@@ -90,19 +90,76 @@ public abstract class LifeForm implements TimeObserver
 		if (currentLP == 0)
 			return;
 		int distance = Environment.getDistance(this.getCell(), victim.getCell());
-		if (!(weapon==null) && weapon.getAmmo() > 0)
+		if (!(weapon == null) && weapon.getAmmo() > 0)
 		{
 			victim.takeHit((weapon.shoot(distance)));
 		} else
 			autoAttack(victim);
 	}
-	
+
+	public void attack(LifeForm actor, int direction)
+	{
+		int actorx = actor.getxLocation();
+		int actory = actor.getyLocation();
+		switch(actor.getDirection())
+		{
+			case Environment.NORTH:
+			{
+				for(int y = actory-1;y >= 0;y--)
+				{
+					LifeForm victim = Environment.getWorld().getLifeForm(y, actorx);
+					if(victim != null)
+					{
+						this.attack(victim);
+						break;
+					}
+				}
+			}
+			case Environment.SOUTH:
+			{
+				for(int y = actory+1;y < Environment.HEIGHT;y++)
+				{
+					LifeForm victim = Environment.getWorld().getLifeForm(y, actorx);
+					if(victim != null)
+					{
+						this.attack(victim);
+						break;
+					}
+				}
+			}
+			case Environment.EAST:
+			{
+				for(int x = actorx+1;x < Environment.WIDTH;x++)
+				{
+					LifeForm victim = Environment.getWorld().getLifeForm(actory, x);
+					if(victim != null)
+					{
+						this.attack(victim);
+						break;
+					}
+				}
+			}
+			case Environment.WEST:
+			{
+				for(int x = actorx-1;x >= 0;x--)
+				{
+					LifeForm victim = Environment.getWorld().getLifeForm(actory, x);
+					if(victim != null)
+					{
+						this.attack(victim);
+						break;
+					}
+				}
+			}
+		}
+	}
+
 	public void autoAttack(LifeForm victim)
 	{
-		if(Environment.getDistance(this.getCell(), victim.getCell()) <= 5)
-		victim.takeHit(attackStrength);
+		if (Environment.getDistance(this.getCell(), victim.getCell()) <= 5)
+			victim.takeHit(attackStrength);
 	}
-	
+
 	/**
 	 * removes "damage" from the current life points.
 	 * 
@@ -154,29 +211,28 @@ public abstract class LifeForm implements TimeObserver
 	{
 		weapon.reload();
 	}
-	
+
 	/**
 	 * moves the LifeForm to this cell
 	 */
 	public void move(Cell c)
 	{
-		if(location != null)
+		if (location != null)
 			location.removeLifeForm();
 		location = c;
 		c.addLifeForm(this);
 	}
-	
-	
+
 	/**
 	 * moves the LifeForm to the cell location
 	 */
 	public void move(int y, int x) throws EnvironmentException
 	{
-		if(y < 0 || y >= Environment.HEIGHT || x < 0 || x > Environment.WIDTH)
+		if (y < 0 || y >= Environment.HEIGHT || x < 0 || x > Environment.WIDTH)
 			throw new EnvironmentException();
 		this.move(Environment.getWorld().getCell(y, x));
 	}
-	
+
 	/**
 	 * returns the cell this LifeForm is in
 	 */
@@ -189,22 +245,25 @@ public abstract class LifeForm implements TimeObserver
 	{
 		return currentDirection;
 	}
+
 	public void turn(int d)
 	{
 		currentDirection = d;
 	}
+
 	public int getMaxSpeed()
 	{
 		return maxSpeed;
 	}
+
 	public int getyLocation()
 	{
 		return location.getyLocation();
 	}
+
 	public int getxLocation()
 	{
 		return location.getxLocation();
 	}
-	
-	
+
 }

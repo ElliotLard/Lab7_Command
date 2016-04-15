@@ -70,12 +70,13 @@ public class TestCommands
 	{
 		Environment world = Environment.getWorld();
 		MockLifeForm bob = new MockLifeForm("bob", 1);
-		MockLifeForm victim = new MockLifeForm("victime", 10);
+		MockLifeForm victim = new MockLifeForm("victim", 10);
 		world.addLifeForm(3, 0, bob);
 		world.addLifeForm(3, 1, victim);
+		bob.turn(Environment.EAST);
 
 		// create an attack command
-		Command attack = new Attack(bob, victim);
+		Command attack = new Attack(bob);
 
 		attack.execute();
 		//victim does not have max life and was succesfully attacked
