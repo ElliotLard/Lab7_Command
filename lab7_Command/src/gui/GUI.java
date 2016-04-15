@@ -14,19 +14,25 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import Weapon.ChainGun;
+import Weapon.Pistol;
+import Weapon.PlasmaCannon;
 import environment.Cell;
 import environment.Environment;
+import gameplay.TimeObserver;
 import lifeform.Alien;
 import lifeform.Human;
 
-public class GUI extends JFrame implements ActionListener
-{
+public class GUI extends JFrame implements TimeObserver
+{	
 	/**
-	 * Just leave these be for now. Won't need them by turn in but it's
-	 * going to be mad if they're removed without also removing them elsewhere
+	 * Coordinates used to generate vertex coordinates
+	 * to create custom shapes.
 	 */
-	JButton textButton, imageButton;
-	JLabel textLabel, imageLabel;	
+	int xCord[] = {0, 10, 20};
+	int yCord[] = {20, 0, 20};
+	int connects = 3;
+	
 	
 	public GUI(){
 		
@@ -44,10 +50,39 @@ public class GUI extends JFrame implements ActionListener
 		setLayout (new BorderLayout());
 		
 		/**
-		 * Just a spot filler for now. Will be replaced with a map legend.
+		 * Makes the map key for the left panel of the frame.
+		 * Going to keep it this way for now because it works,
+		 * but probably should see if there's a way to shrink it.
 		 */
-		textButton = new JButton("A Button");
-		add("East", textButton);
+		JPanel mapKey = new JPanel (new GridLayout(5, 1));
+		JLabel[][] keyArray = new JLabel[5][1];
+		
+		keyArray[0][0] = new JLabel (createTriangle());
+		mapKey.add(keyArray[0][0]);
+		keyArray[0][0] = new JLabel (" - Alien");
+		mapKey.add(keyArray[0][0]);
+		
+		keyArray[1][0] = new JLabel (createCircle());
+		mapKey.add(keyArray[1][0]);
+		keyArray[1][0] = new JLabel (" - Human");
+		mapKey.add(keyArray[1][0]);
+		
+		keyArray[2][0] = new JLabel (createPistol());
+		mapKey.add(keyArray[2][0]);
+		keyArray[2][0] = new JLabel (" - Pistol");
+		mapKey.add(keyArray[2][0]);
+		
+		keyArray[3][0] = new JLabel (createChainGun());
+		mapKey.add(keyArray[3][0]);
+		keyArray[3][0] = new JLabel (" - ChainGun");
+		mapKey.add(keyArray[3][0]);
+		
+		keyArray[4][0] = new JLabel (createPlasmaCannon());
+		mapKey.add(keyArray[4][0]);
+		keyArray[4][0] = new JLabel (" - PlasmaCannon ");
+		mapKey.add(keyArray[4][0]);
+		
+		add("East", mapKey);
 		
 		/**
 		 * This section defines the center frame. To stay consistent I'm using
@@ -67,28 +102,40 @@ public class GUI extends JFrame implements ActionListener
 		for (int x = 0; x < Environment.HEIGHT; x++){
 			for (int y = 0; y < Environment.WIDTH; y++){
 				/**
-				 * Checks for an Alien and places an A if it finds one.
+				 * Checks for an Alien and places a green triangle if it finds one.
 				 */
 				if (Environment.getWorld().getLifeForm(x, y) instanceof Alien)
 				{
-					labelArray[x][y] = new JLabel ("  A  ");
+					labelArray[x][y] = new JLabel (createTriangle());
 				}
 				/**
-				 * Checks for a Human and places an H if it finds one.
+				 * Checks for a Human and places an red circle if it finds one.
 				 */
 				else if (Environment.getWorld().getLifeForm(x, y) instanceof Human)
 				{
-					labelArray[x][y] = new JLabel ("  H  ");
+					labelArray[x][y] = new JLabel (createCircle());
 				}
 				/**
 				 * If nothing is found it places a dot. Spacing is to keep
 				 * the window more uniform till I figure out cell padding.
 				 */
+				
+				else if (Environment.getWorld().getWeapon(x, y) instanceof Pistol)
+				{
+					labelArray[x][y] = new JLabel (createPistol());
+				}
+				else if (Environment.getWorld().getWeapon(x, y) instanceof ChainGun)
+				{
+					labelArray[x][y] = new JLabel (createChainGun());
+				}
+				else if (Environment.getWorld().getWeapon(x, y) instanceof PlasmaCannon)
+				{
+					labelArray[x][y] = new JLabel (createPlasmaCannon());
+				}
 				else
 				{
-					labelArray[x][y] = new JLabel ("  .  ");
+					labelArray[x][y] = new JLabel (createGround());
 				}
-				
 				/**
 				 * Sets centerPanel to hold the labelArray after it is created.
 				 */
@@ -107,15 +154,112 @@ public class GUI extends JFrame implements ActionListener
 		pack();
 		setVisible(true);
 	}
+	
+	/**
+	 * Green triangle used to represent Aliens
+	 * @return
+	 */
+	public ImageIcon createTriangle(){
+		BufferedImage Image = new
+				BufferedImage (20, 20, BufferedImage.TYPE_4BYTE_ABGR);
+		Graphics drawer = Image.getGraphics();
+		
+		drawer.setColor(new Color(0, 255, 0));
+		drawer.fillPolygon(xCord, yCord,  connects);
+		
+		return new ImageIcon(Image);
+	}
+	
+	/**
+	 * Red Circle used to represent humans
+	 * @return
+	 */
+	public ImageIcon createCircle(){
+		BufferedImage Image = new
+				BufferedImage (20, 20, BufferedImage.TYPE_4BYTE_ABGR);
+		Graphics drawer = Image.getGraphics();
+		
+		drawer.setColor(new Color(255, 0, 0));
+		drawer.fillOval(0,  0,  20,  20);
+		
+		return new ImageIcon(Image);
+	}
+	
+	/**
+	 * Ground is represented by a gray square with a black border.
+	 * @return
+	 */
+	public ImageIcon createGround(){
+		BufferedImage Image = new
+				BufferedImage (20, 20, BufferedImage.TYPE_4BYTE_ABGR);
+		Graphics drawer = Image.getGraphics();
+		
+		drawer.setColor(new Color(200, 200, 200));
+		drawer.fillRect(0,  0,  20,  20);
+		
+		drawer.setColor(new Color(0, 0, 0));
+		drawer.drawRect(0, 0, 20, 20);
+		
+		return new ImageIcon(Image);
+	}
+	
+	/**
+	 * Makes a tiny purple dot for a pistol
+	 * @return
+	 */
+	public ImageIcon createPistol(){
+		BufferedImage Image = new
+				BufferedImage (20, 20, BufferedImage.TYPE_4BYTE_ABGR);
+		Graphics drawer = Image.getGraphics();
+		
+		drawer.setColor(new Color(255, 255, 0));
+		drawer.fillOval(5,  5,  10,  10);
+		
+		return new ImageIcon(Image);
+	}
+	
+	/**
+	 * Makes a tiny teal dot for a Chain Gun
+	 * @return
+	 */
+	public ImageIcon createChainGun(){
+		BufferedImage Image = new
+				BufferedImage (20, 20, BufferedImage.TYPE_4BYTE_ABGR);
+		Graphics drawer = Image.getGraphics();
+		
+		drawer.setColor(new Color(0, 255, 255));
+		drawer.fillOval(5,  5,  10,  10);
+		
+		return new ImageIcon(Image);
+	}
+	
+	/**
+	 * Makes a tiny purple dot for Plasma Cannon
+	 * @return
+	 */
+	public ImageIcon createPlasmaCannon(){
+		BufferedImage Image = new
+				BufferedImage (20, 20, BufferedImage.TYPE_4BYTE_ABGR);
+		Graphics drawer = Image.getGraphics();
+		
+		drawer.setColor(new Color(255, 0, 255));
+		drawer.fillOval(5,  5,  10,  10);
+		
+		return new ImageIcon(Image);
+	}
 
 	/**
-	 * Not touched yet
+	 * Every five seconds the GUI is redrawn and updated.
+	 * Must be added as a TimeObserver to function.
 	 */
+	
 	@Override
-	public void actionPerformed(ActionEvent arg0)
+	public void updateTime(int time)
 	{
-		// Seriously. I haven't done this.
-		
-		// Stahp
+		if (time % 5 == 0)
+		{
+			revalidate();
+			repaint();
+		}
 	}
 }

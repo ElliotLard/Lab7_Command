@@ -6,6 +6,7 @@ import environment.Environment;
 import exceptions.EnvironmentException;
 import lifeform.Human;
 import lifeform.LifeForm;
+import lifeform.MockLifeForm;
 
 public class Runner
 {
