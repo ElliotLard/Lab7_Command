@@ -31,6 +31,14 @@ public class GUI extends JFrame implements TimeObserver
 	int xCord[] = { 0, 10, 20 };
 	int yCord[] = { 20, 0, 20 };
 	int connects = 3;
+	
+	JPanel mapKey = new JPanel(new GridLayout(5, 1));
+	JLabel[][] keyArray = new JLabel[5][1];
+	
+	JPanel centerPanel = new JPanel(new GridLayout(Environment.HEIGHT, Environment.WIDTH));
+	JLabel[][] labelArray = new JLabel[Environment.HEIGHT][Environment.WIDTH];
+	
+	int time;
 
 	public GUI()
 	{
@@ -50,8 +58,6 @@ public class GUI extends JFrame implements TimeObserver
 		 * this way for now because it works, but probably should see if there's
 		 * a way to shrink it.
 		 */
-		JPanel mapKey = new JPanel(new GridLayout(5, 1));
-		JLabel[][] keyArray = new JLabel[5][1];
 
 		keyArray[0][0] = new JLabel(createTriangle());
 		mapKey.add(keyArray[0][0]);
@@ -93,8 +99,6 @@ public class GUI extends JFrame implements TimeObserver
 		 * The for loop checks through the world map for instances of objects
 		 * and labels them according on the labelArray.
 		 */
-		JPanel centerPanel = new JPanel(new GridLayout(Environment.HEIGHT, Environment.WIDTH));
-		JLabel[][] labelArray = new JLabel[Environment.HEIGHT][Environment.WIDTH];
 		for (int x = 0; x < Environment.HEIGHT; x++) {
 			for (int y = 0; y < Environment.WIDTH; y++) {
 				/**
@@ -139,6 +143,8 @@ public class GUI extends JFrame implements TimeObserver
 		/**
 		 * This builds the JFrame and makes it visible.
 		 */
+		
+		
 		pack();
 		setVisible(true);
 	}
@@ -250,9 +256,72 @@ public class GUI extends JFrame implements TimeObserver
 	@Override
 	public void updateTime(int time)
 	{
-		if (time % 5 == 0) {
+		if (time % 2 == 0) {
 			revalidate();
 			repaint();
 		}
+//		this.time = time;
+	}
+	
+	public void repaint()
+	{
+		/**
+		 * This section defines the center frame. To stay consistent I'm using
+		 * the constants from the environment class to define the grid size.
+		 */
+
+		/**
+		 * This first line creates a JPanel called centerPanel. Since it's a
+		 * grid I have to define the height and width. This is done with
+		 * labelArray, which is what will actually be displayed.
+		 * 
+		 * The for loop checks through the world map for instances of objects
+		 * and labels them according on the labelArray.
+		 */
+		for (int x = 0; x < Environment.HEIGHT; x++) {
+			for (int y = 0; y < Environment.WIDTH; y++) {
+				/**
+				 * Checks for an Alien and places a green triangle if it finds
+				 * one.
+				 */
+				if (Environment.getWorld().getLifeForm(x, y) instanceof Alien) {
+					labelArray[x][y].setIcon(createTriangle());
+				}
+				/**
+				 * Checks for a Human and places an red circle if it finds one.
+				 */
+				else if (Environment.getWorld().getLifeForm(x, y) instanceof Human) {
+					labelArray[x][y].setIcon(createCircle());
+				}
+
+
+				else if (Environment.getWorld().getWeapon(x, y) instanceof Pistol) {
+					labelArray[x][y].setIcon(createPistol());
+				} else if (Environment.getWorld().getWeapon(x, y) instanceof ChainGun) {
+					labelArray[x][y].setIcon(createChainGun());
+				} else if (Environment.getWorld().getWeapon(x, y) instanceof PlasmaCannon) {
+					labelArray[x][y].setIcon(createPlasmaCannon());
+				} else {
+					labelArray[x][y].setIcon(createGround());
+				}
+				/**
+				 * Sets centerPanel to hold the labelArray after it is created.
+				 */
+				centerPanel.add(labelArray[x][y]);
+			}
+		}
+
+		/**
+		 * puts centerPanel in to the center area of our game board
+		 */
+		add("Center", centerPanel);
+
+		/**
+		 * This builds the JFrame and makes it visible.
+		 */
+		
+		
+		pack();
+		setVisible(true);
 	}
 }
