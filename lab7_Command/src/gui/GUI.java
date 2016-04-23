@@ -32,13 +32,16 @@ public class GUI extends JFrame implements TimeObserver
 	int yCord[] = { 20, 0, 20 };
 	int connects = 3;
 	
+	/**
+	 * Global variables for the JFrames JLabel and JPanel.
+	 * JPanel is the center area of the JFrame.
+	 * JLabel makes up the Map Key on the right.
+	 */
 	JPanel mapKey = new JPanel(new GridLayout(5, 1));
 	JLabel[][] keyArray = new JLabel[5][1];
 	
 	JPanel centerPanel = new JPanel(new GridLayout(Environment.HEIGHT, Environment.WIDTH));
 	JLabel[][] labelArray = new JLabel[Environment.HEIGHT][Environment.WIDTH];
-	
-	int time;
 
 	public GUI()
 	{
@@ -249,7 +252,7 @@ public class GUI extends JFrame implements TimeObserver
 	}
 
 	/**
-	 * Every five seconds the GUI is redrawn and updated. Must be added as a
+	 * Every two seconds the GUI is redrawn and updated. Must be added as a
 	 * TimeObserver to function.
 	 */
 
@@ -258,43 +261,28 @@ public class GUI extends JFrame implements TimeObserver
 	{
 		if (time % 2 == 0) {
 			revalidate();
-			repaint();
+			repaint(); // Calls the repaint method
 		}
-//		this.time = time;
 	}
 	
 	public void repaint()
 	{
 		/**
-		 * This section defines the center frame. To stay consistent I'm using
-		 * the constants from the environment class to define the grid size.
-		 */
-
-		/**
-		 * This first line creates a JPanel called centerPanel. Since it's a
-		 * grid I have to define the height and width. This is done with
-		 * labelArray, which is what will actually be displayed.
+		 * This section rebuilds the JFrame when repaint() is called.
+		 * It rejects every position in the game and then updates each position
+		 * with whatever object is now in each spot.
 		 * 
-		 * The for loop checks through the world map for instances of objects
-		 * and labels them according on the labelArray.
+		 * Map Key is ignored because nothing in it changes.
 		 */
 		for (int x = 0; x < Environment.HEIGHT; x++) {
 			for (int y = 0; y < Environment.WIDTH; y++) {
-				/**
-				 * Checks for an Alien and places a green triangle if it finds
-				 * one.
-				 */
+		
 				if (Environment.getWorld().getLifeForm(x, y) instanceof Alien) {
 					labelArray[x][y].setIcon(createTriangle());
 				}
-				/**
-				 * Checks for a Human and places an red circle if it finds one.
-				 */
 				else if (Environment.getWorld().getLifeForm(x, y) instanceof Human) {
 					labelArray[x][y].setIcon(createCircle());
 				}
-
-
 				else if (Environment.getWorld().getWeapon(x, y) instanceof Pistol) {
 					labelArray[x][y].setIcon(createPistol());
 				} else if (Environment.getWorld().getWeapon(x, y) instanceof ChainGun) {
@@ -304,24 +292,15 @@ public class GUI extends JFrame implements TimeObserver
 				} else {
 					labelArray[x][y].setIcon(createGround());
 				}
-				/**
-				 * Sets centerPanel to hold the labelArray after it is created.
-				 */
-				centerPanel.add(labelArray[x][y]);
+
+				centerPanel.add(labelArray[x][y]); // Adds the redone JPanel to the centerPanel.
 			}
 		}
 
-		/**
-		 * puts centerPanel in to the center area of our game board
-		 */
-		add("Center", centerPanel);
 
-		/**
-		 * This builds the JFrame and makes it visible.
-		 */
+		add("Center", centerPanel); // Redraws the Center of the layout.
 		
-		
-		pack();
-		setVisible(true);
+		pack(); // Redraws the window as needed
+		setVisible(true); // Keeps it visible
 	}
 }
